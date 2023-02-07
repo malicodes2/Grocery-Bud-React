@@ -11,25 +11,32 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(!name){
+    if (!name) {
       //display alert
+      showAlert(true, 'danger', 'please enter any value')
     }
-    else if (name && isEditing){
+    else if (name && isEditing) {
       //deal with edit
     }
     else {
       //show alert
-      const newItem = {id: new Date().getTime().toString(), 
-      title:name};
+      const newItem = {
+        id: new Date().getTime().toString(),
+        title: name
+      };
       setList([...list, newItem]);
       setName('')
     }
   }
 
+  const showAlert = (show = false, type = "", msg = "") => {
+    setAlert({show, type, msg})
+  }
+
   return (
     <section className='section-center'>
       <form className='grocery-form' onSubmit={handleSubmit}>
-        {alert.show && <Alert />}
+        {alert.show && <Alert {...alert} removeAlert={showAlert} />}
         <h3>grocery bud</h3>
         <div className='form-control'>
           <input
@@ -44,12 +51,14 @@ function App() {
           </button>
         </div>
       </form>
-      <div className='grocery-container'>
-        <List items={list} />
-        <button className='clear-btn'>
-          clear items
-        </button>
-      </div>
+      {list.length > 0 && (
+        <div className='grocery-container'>
+          <List items={list} />
+          <button className='clear-btn'>
+            clear items
+          </button>
+        </div>
+      )}
     </section>
   )
 }
